@@ -599,6 +599,83 @@
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
+
+        /* ===== ВИДЕО-ФОН (экран 5) ===== */
+        .video-bg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+            z-index: 0;
+        }
+        .video-bg.active {
+            opacity: 0.25;
+        }
+        .screen-5 > *:not(.video-bg) {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== ОБРАТНЫЙ ОТСЧЁТ ===== */
+        .countdown {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(26, 10, 30, 0.95);
+            z-index: 200;
+        }
+        .countdown.active { display: flex; }
+        .countdown-number {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(80px, 20vw, 200px);
+            color: transparent;
+            background: linear-gradient(135deg, #ff6b9d, #ffa8cc, #ffdb8b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: countPop 0.8s ease;
+        }
+        @keyframes countPop {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* ===== СЕКРЕТНОЕ СООБЩЕНИЕ ===== */
+        .secret-message {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            background: rgba(26, 10, 30, 0.95);
+            z-index: 500;
+            cursor: pointer;
+        }
+        .secret-message.active { display: flex; }
+        .secret-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(40px, 10vw, 90px);
+            color: transparent;
+            background: linear-gradient(135deg, #ff6b9d, #ffdb8b, #ff6b9d);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shimmer 3s ease infinite, fadeUp 1s ease;
+            text-align: center;
+        }
+        .secret-hint {
+            color: rgba(255, 182, 193, 0.5);
+            font-size: 12px;
+            margin-top: 20px;
+            letter-spacing: 2px;
+        }
     </style>
 </head>
 <body>
@@ -630,7 +707,7 @@
         <div class="subtitle-names">
             для <span class="name-cycle" id="nameCycle">Ксении</span>
         </div>
-        <button class="btn" onclick="goToScreen(2)">Открыть поздравление</button>
+        <button class="btn" onclick="startCountdown()">Открыть поздравление</button>
     </div>
 
     <!-- ЭКРАН 2: Имя -->
@@ -674,6 +751,9 @@
 
     <!-- ЭКРАН 5: Финальный -->
     <div class="screen screen-5" id="screen5">
+        <video class="video-bg" id="videoBg" loop muted playsinline>
+            <source src="video.mp4" type="video/mp4">
+        </video>
         <div class="final-text" id="finalText">С любовью,<br>навсегда твой ❤</div>
         <div class="final-signature" id="finalSignature">8 марта 2026</div>
         <button class="music-btn" id="musicBtn" onclick="toggleMusic()">
@@ -683,6 +763,17 @@
         <button class="share-btn" onclick="shareCard()">
             <span>💌</span> Показать подругам
         </button>
+    </div>
+
+    <!-- Обратный отсчёт -->
+    <div class="countdown" id="countdown">
+        <span class="countdown-number" id="countdownNumber">3</span>
+    </div>
+
+    <!-- Секретное сообщение (тряска) -->
+    <div class="secret-message" id="secretMessage" onclick="hideSecret()">
+        <div class="secret-text">Я тебя люблю ❤</div>
+        <div class="secret-hint">нажми чтобы закрыть</div>
     </div>
 
     <!-- Toast-уведомление -->
@@ -963,12 +1054,16 @@
             const btn = document.getElementById('musicBtn');
             const label = document.getElementById('musicLabel');
 
+            const video = document.getElementById('videoBg');
+
             if (musicPlaying) {
                 audio.pause();
                 btn.classList.remove('playing');
                 label.textContent = 'Включить музыку';
                 hideFireflies();
                 document.body.classList.remove('music-playing');
+                video.pause();
+                video.classList.remove('active');
             } else {
                 audio.play().catch(() => {
                     label.textContent = 'Нет файла music.mp3';
@@ -978,6 +1073,8 @@
                 label.textContent = 'Пауза';
                 showFireflies();
                 document.body.classList.add('music-playing');
+                video.play().catch(() => {});
+                video.classList.add('active');
             }
             musicPlaying = !musicPlaying;
         }
@@ -1018,6 +1115,49 @@
                 if (currentScreen > 1) goToScreen(currentScreen - 1);
             }
         });
+
+        // ===== ОБРАТНЫЙ ОТСЧЁТ =====
+        function startCountdown() {
+            const overlay = document.getElementById('countdown');
+            const num = document.getElementById('countdownNumber');
+            overlay.classList.add('active');
+            let count = 3;
+            num.textContent = count;
+
+            const interval = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    num.style.animation = 'none';
+                    num.offsetHeight; // reflow
+                    num.style.animation = 'countPop 0.8s ease';
+                    num.textContent = count;
+                } else {
+                    clearInterval(interval);
+                    overlay.classList.remove('active');
+                    goToScreen(2);
+                }
+            }, 1000);
+        }
+
+        // ===== СЕКРЕТНОЕ СООБЩЕНИЕ (тряска) =====
+        let lastShake = 0;
+        window.addEventListener('devicemotion', (e) => {
+            const acc = e.accelerationIncludingGravity;
+            if (!acc) return;
+            const force = Math.abs(acc.x) + Math.abs(acc.y) + Math.abs(acc.z);
+            if (force > 35 && Date.now() - lastShake > 3000) {
+                lastShake = Date.now();
+                showSecret();
+            }
+        });
+
+        function showSecret() {
+            document.getElementById('secretMessage').classList.add('active');
+        }
+
+        function hideSecret() {
+            document.getElementById('secretMessage').classList.remove('active');
+        }
 
         // ===== СВАЙПЫ (мобилка) =====
         let touchStartY = 0;
