@@ -730,6 +730,251 @@
             80% { transform: rotate(-8deg); }
         }
 
+        /* ===== BTS TOGGLE ===== */
+        .bts-toggle {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            padding: 8px 14px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.4s ease;
+        }
+        .bts-toggle:hover {
+            border-color: rgba(179, 136, 255, 0.5);
+            background: rgba(0, 0, 0, 0.55);
+        }
+        .bts-toggle-label {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            transition: color 0.4s ease;
+        }
+        body.bts-mode .bts-toggle-label {
+            color: #ce93d8;
+        }
+        .bts-switch {
+            width: 38px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            position: relative;
+            transition: background 0.4s ease;
+        }
+        .bts-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #aaa;
+            transition: all 0.4s ease;
+        }
+        body.bts-mode .bts-switch {
+            background: linear-gradient(135deg, #b388ff, #e040fb);
+        }
+        body.bts-mode .bts-switch::after {
+            left: 20px;
+            background: #fff;
+        }
+
+        /* ===== BTS LOGO ===== */
+        .bts-logo {
+            display: none;
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+        body.bts-mode .bts-logo {
+            display: block;
+            opacity: 1;
+        }
+        .bts-purple-text {
+            display: none;
+        }
+        body.bts-mode .bts-purple-text {
+            display: block;
+        }
+        body.bts-mode .bts-normal-text {
+            display: none;
+        }
+
+        /* ===== BTS THEME ===== */
+        body.bts-mode {
+            background: #1a0a2e;
+        }
+
+        body.bts-mode .screen-1 {
+            background: linear-gradient(135deg, #1a0a2e 0%, #2d1050 30%, #3d1570 60%, #1a0a2e 100%);
+        }
+        body.bts-mode .screen-2 {
+            background: linear-gradient(135deg, #1a0a2e 0%, #2d1050 50%, #1a0a2e 100%);
+        }
+        body.bts-mode .screen-3 {
+            background: linear-gradient(135deg, #1a0a2e 0%, #2d1050 50%, #1a0a2e 100%);
+        }
+        body.bts-mode .screen-4 {
+            background: linear-gradient(135deg, #1a0a2e 0%, #3d1570 50%, #1a0a2e 100%);
+        }
+        body.bts-mode .screen-5 {
+            background: linear-gradient(135deg, #1a0a2e 0%, #2d1050 30%, #3d1570 60%, #1a0a2e 100%);
+        }
+
+        body.bts-mode .title-8march {
+            background: linear-gradient(135deg, #b388ff, #e040fb, #ce93d8, #b388ff);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        body.bts-mode .subtitle-names {
+            color: #ce93d8;
+        }
+
+        body.bts-mode .name-display {
+            background: linear-gradient(135deg, #b388ff, #e040fb, #b388ff);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        body.bts-mode .compliment {
+            color: #e1bee7;
+        }
+
+        body.bts-mode .greeting-title {
+            color: #ce93d8;
+        }
+
+        body.bts-mode .greeting-text .line {
+            color: #e1bee7;
+        }
+
+        body.bts-mode .gallery-title {
+            color: #ce93d8;
+        }
+
+        body.bts-mode .gallery::-webkit-scrollbar-thumb {
+            background: rgba(179, 136, 255, 0.3);
+        }
+
+        body.bts-mode .final-text {
+            background: linear-gradient(135deg, #b388ff, #e040fb, #b388ff);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        body.bts-mode .final-signature {
+            color: #ce93d8;
+        }
+
+        body.bts-mode .btn {
+            border-color: rgba(179, 136, 255, 0.5);
+            background: rgba(179, 136, 255, 0.1);
+            color: #ce93d8;
+        }
+        body.bts-mode .btn:hover {
+            background: rgba(179, 136, 255, 0.25);
+            box-shadow: 0 0 25px rgba(179, 136, 255, 0.3);
+        }
+
+        body.bts-mode .music-btn {
+            border-color: rgba(179, 136, 255, 0.5);
+            background: rgba(179, 136, 255, 0.1);
+            color: #ce93d8;
+        }
+        body.bts-mode .music-btn:hover {
+            background: rgba(179, 136, 255, 0.25);
+            box-shadow: 0 0 25px rgba(179, 136, 255, 0.3);
+        }
+
+        body.bts-mode .share-btn {
+            border-color: rgba(179, 136, 255, 0.5);
+            background: rgba(179, 136, 255, 0.1);
+            color: #ce93d8;
+        }
+
+        body.bts-mode .nav-dot {
+            border-color: rgba(179, 136, 255, 0.5);
+        }
+        body.bts-mode .nav-dot.active {
+            background: #b388ff;
+            border-color: #b388ff;
+        }
+
+        body.bts-mode .envelope-body {
+            background: linear-gradient(160deg, #e0d0f5, #d5c0ea, #cbb0e0);
+        }
+        body.bts-mode .envelope-flap-front {
+            background: linear-gradient(180deg, #cbb0e0, #b89cd0);
+        }
+        body.bts-mode .envelope-flap-back {
+            background: linear-gradient(180deg, #b89cd0, #a888c0);
+        }
+        body.bts-mode .envelope-heart path {
+            fill: #9c27b0;
+        }
+        body.bts-mode .letter-title {
+            background: linear-gradient(135deg, #b388ff, #e040fb, #ce93d8);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        body.bts-mode .letter-subtitle {
+            color: #9575cd;
+        }
+        body.bts-mode .letter-subtitle .name-cycle {
+            color: #ab47bc;
+        }
+        body.bts-mode .countdown {
+            background: rgba(26, 10, 46, 0.95);
+        }
+        body.bts-mode .countdown-number {
+            background: linear-gradient(135deg, #b388ff, #e040fb, #ce93d8);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        body.bts-mode .secret-message {
+            background: rgba(26, 10, 46, 0.95);
+        }
+        body.bts-mode .secret-text {
+            color: #e040fb;
+            text-shadow: 0 0 40px rgba(224, 64, 251, 0.5);
+        }
+        body.bts-mode .shake-hint {
+            color: rgba(206, 147, 216, 0.35);
+        }
+        body.bts-mode .shake-hint.visible {
+            color: rgba(206, 147, 216, 0.35);
+        }
+
+        body.bts-mode .modal img {
+            box-shadow: 0 0 50px rgba(179, 136, 255, 0.3);
+        }
+
+        /* Smooth transitions for theme switch */
+        .screen {
+            transition: opacity 0.8s ease, background 0.6s ease;
+        }
+        .envelope-body, .envelope-flap-front, .envelope-flap-back,
+        .btn, .music-btn, .share-btn, .nav-dot {
+            transition: all 0.6s ease;
+        }
+
         /* ===== КОНВЕРТ ===== */
         .envelope-wrapper {
             display: flex;
@@ -954,6 +1199,12 @@
 </head>
 <body>
 
+    <!-- BTS Toggle -->
+    <div class="bts-toggle" onclick="toggleBTS()">
+        <span class="bts-toggle-label">BTS 💜</span>
+        <div class="bts-switch"></div>
+    </div>
+
     <!-- Звёздный фон -->
     <div class="stars-container" id="stars"></div>
 
@@ -980,6 +1231,15 @@
 
     <!-- ЭКРАН 1: Конверт -->
     <div class="screen screen-1 active" id="screen1">
+        <!-- BTS Logo (visible in BTS mode) -->
+        <div class="bts-logo">
+            <svg width="60" height="40" viewBox="0 0 60 40">
+                <polygon points="5,38 15,2 25,38" fill="none" stroke="#b388ff" stroke-width="2.5"/>
+                <polygon points="35,38 45,2 55,38" fill="none" stroke="#b388ff" stroke-width="2.5"/>
+                <line x1="25" y1="38" x2="35" y2="38" stroke="#b388ff" stroke-width="2.5"/>
+                <text x="30" y="32" text-anchor="middle" fill="#e040fb" font-size="8" font-family="sans-serif" font-weight="bold">BTS</text>
+            </svg>
+        </div>
         <div class="envelope-wrapper">
             <div class="envelope" id="envelope">
                 <div class="envelope-flap">
@@ -1047,7 +1307,10 @@
         <video class="video-bg" id="videoBg" loop muted playsinline>
             <source src="video.mp4" type="video/mp4">
         </video>
-        <div class="final-text" id="finalText">С любовью,<br>навсегда твой ❤</div>
+        <div class="final-text" id="finalText">
+            <span class="bts-normal-text">С любовью,<br>навсегда твой ❤</span>
+            <span class="bts-purple-text">I purple you 💜</span>
+        </div>
         <div class="final-signature" id="finalSignature">8 марта 2026</div>
         <button class="music-btn" id="musicBtn" onclick="toggleMusic()">
             <span class="music-icon">♪</span>
@@ -1086,6 +1349,9 @@
     <audio id="bgMusic" loop>
         <source src="music.mp3" type="audio/mpeg">
     </audio>
+    <audio id="btsMusic" loop>
+        <source src="bts-music.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
         // ===== КОНФИГУРАЦИЯ =====
@@ -1106,6 +1372,7 @@
         let currentScreen = 1;
         let musicPlaying = false;
         let nameIndex = 0;
+        let btsMode = false;
 
         // ===== ЗВУКИ UI (Web Audio API) =====
         let audioCtx = null;
@@ -1210,6 +1477,67 @@
             } catch(e) {}
         }
 
+        // ===== BTS MODE =====
+        function toggleBTS() {
+            btsMode = !btsMode;
+            document.body.classList.toggle('bts-mode', btsMode);
+            playClickSound();
+
+            // Switch music if playing
+            if (musicPlaying) {
+                const bgMusic = document.getElementById('bgMusic');
+                const btsAudio = document.getElementById('btsMusic');
+                if (btsMode) {
+                    bgMusic.pause();
+                    btsAudio.currentTime = 0;
+                    btsAudio.play().catch(() => {});
+                } else {
+                    btsAudio.pause();
+                    bgMusic.currentTime = 0;
+                    bgMusic.play().catch(() => {});
+                }
+            }
+
+            // Refresh petals/hearts if on screen 5
+            if (currentScreen === 5) {
+                showPetals();
+                showHearts();
+            }
+        }
+
+        function getButterflyColors() {
+            if (btsMode) {
+                return [
+                    { wing: '#b388ff', body: '#7c4dff' },
+                    { wing: '#e040fb', body: '#ab47bc' },
+                    { wing: '#ce93d8', body: '#9c27b0' },
+                    { wing: '#ea80fc', body: '#d500f9' },
+                    { wing: '#b39ddb', body: '#7e57c2' },
+                ];
+            }
+            return [
+                { wing: '#ff7eb3', body: '#d4577a' },
+                { wing: '#c77dff', body: '#9b4dca' },
+                { wing: '#ffd700', body: '#daa520' },
+                { wing: '#ff9ec6', body: '#e06f9a' },
+                { wing: '#b48eff', body: '#8a5ec0' },
+            ];
+        }
+
+        function getPetalColors() {
+            if (btsMode) {
+                return ['#b388ff', '#ce93d8', '#e040fb', '#ea80fc', '#b39ddb'];
+            }
+            return ['#ffb6c1', '#ff69b4', '#ffc0cb', '#ff91a4', '#ffa8cc'];
+        }
+
+        function getHeartColors() {
+            if (btsMode) {
+                return ['#b388ff', '#9c27b0', '#e040fb'];
+            }
+            return ['#ff6b9d', '#ff3366', '#ff69b4'];
+        }
+
         // ===== КОНВЕРТ =====
         function openEnvelope() {
             playClickSound();
@@ -1225,13 +1553,7 @@
         function spawnButterflies() {
             const container = document.getElementById('butterflies');
             const count = 5 + Math.floor(Math.random() * 4); // 5-8
-            const colors = [
-                { wing: '#ff7eb3', body: '#d4577a' },
-                { wing: '#c77dff', body: '#9b4dca' },
-                { wing: '#ffd700', body: '#daa520' },
-                { wing: '#ff9ec6', body: '#e06f9a' },
-                { wing: '#b48eff', body: '#8a5ec0' },
-            ];
+            const colors = getButterflyColors();
 
             for (let i = 0; i < count; i++) {
                 const butterfly = document.createElement('div');
@@ -1456,7 +1778,7 @@
                 petal.style.animationDuration = (4 + Math.random() * 4) + 's';
                 petal.style.animationDelay = Math.random() * 5 + 's';
 
-                const colors = ['#ffb6c1', '#ff69b4', '#ffc0cb', '#ff91a4', '#ffa8cc'];
+                const colors = getPetalColors();
                 const color = colors[Math.floor(Math.random() * colors.length)];
                 const size = 8 + Math.random() * 12;
 
@@ -1482,7 +1804,7 @@
                 heart.style.animationDelay = (2 + Math.random() * 5) + 's';
 
                 const size = 10 + Math.random() * 15;
-                const colors = ['#ff6b9d', '#ff3366', '#ff69b4'];
+                const colors = getHeartColors();
                 const color = colors[Math.floor(Math.random() * colors.length)];
 
                 heart.innerHTML = `<svg width="${size}" height="${size}" viewBox="0 0 24 24">
@@ -1500,10 +1822,9 @@
             const container = document.getElementById('fireflies');
             container.innerHTML = '';
             const count = 40;
-            const colors = [
-                '#ffdb8b', '#ffd700', '#ffb6c1', '#ff69b4',
-                '#ffa8cc', '#ffe4b5', '#fff5cc', '#ffc0cb'
-            ];
+            const colors = btsMode
+                ? ['#b388ff', '#e040fb', '#ce93d8', '#ea80fc', '#b39ddb', '#d500f9', '#9c27b0', '#7c4dff']
+                : ['#ffdb8b', '#ffd700', '#ffb6c1', '#ff69b4', '#ffa8cc', '#ffe4b5', '#fff5cc', '#ffc0cb'];
 
             for (let i = 0; i < count; i++) {
                 const fly = document.createElement('div');
@@ -1547,14 +1868,17 @@
 
         // ===== МУЗЫКА =====
         function toggleMusic() {
-            const audio = document.getElementById('bgMusic');
+            const bgAudio = document.getElementById('bgMusic');
+            const btsAudio = document.getElementById('btsMusic');
+            const audio = btsMode ? btsAudio : bgAudio;
             const btn = document.getElementById('musicBtn');
             const label = document.getElementById('musicLabel');
 
             const video = document.getElementById('videoBg');
 
             if (musicPlaying) {
-                audio.pause();
+                bgAudio.pause();
+                btsAudio.pause();
                 btn.classList.remove('playing');
                 label.textContent = 'Включить музыку';
                 hideFireflies();
@@ -1562,8 +1886,9 @@
                 video.pause();
                 video.classList.remove('active');
             } else {
+                const errFile = btsMode ? 'bts-music.mp3' : 'music.mp3';
                 audio.play().catch(() => {
-                    label.textContent = 'Нет файла music.mp3';
+                    label.textContent = 'Нет файла ' + errFile;
                     return;
                 });
                 btn.classList.add('playing');
