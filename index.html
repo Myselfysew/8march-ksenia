@@ -637,12 +637,30 @@
             background: linear-gradient(135deg, #ff6b9d, #ffa8cc, #ffdb8b);
             -webkit-background-clip: text;
             background-clip: text;
-            animation: countPop 0.8s ease;
+            will-change: transform, opacity;
+        }
+        .countdown-number.pop {
+            animation: countPop 0.8s ease forwards;
         }
         @keyframes countPop {
             0% { transform: scale(0.3); opacity: 0; }
             50% { transform: scale(1.2); opacity: 1; }
             100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* ===== ЭФФЕКТ ПЕЧАТНОЙ МАШИНКИ ===== */
+        .typewriter-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background: #ffb6c1;
+            margin-left: 2px;
+            vertical-align: text-bottom;
+            animation: blink 0.7s step-end infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
 
         /* ===== СЕКРЕТНОЕ СООБЩЕНИЕ ===== */
@@ -874,10 +892,7 @@
                 case 3:
                     const title = document.getElementById('greetingTitle');
                     title.classList.add('animate');
-                    document.querySelectorAll('#greetingText .line').forEach((line, i) => {
-                        setTimeout(() => line.classList.add('animate'), 400 + i * 300);
-                        line.style.animationDelay = `${0.4 + i * 0.3}s`;
-                    });
+                    setTimeout(() => typewriterLines(), 800);
                     break;
                 case 4:
                     document.querySelectorAll('.gallery-item').forEach((item, i) => {
@@ -1119,18 +1134,25 @@
         // ===== ОБРАТНЫЙ ОТСЧЁТ =====
         function startCountdown() {
             const overlay = document.getElementById('countdown');
-            const num = document.getElementById('countdownNumber');
             overlay.classList.add('active');
             let count = 3;
-            num.textContent = count;
+
+            function showNumber(n) {
+                // Пересоздаём элемент чтобы анимация гарантированно перезапустилась
+                const old = document.getElementById('countdownNumber');
+                const fresh = document.createElement('span');
+                fresh.className = 'countdown-number pop';
+                fresh.id = 'countdownNumber';
+                fresh.textContent = n;
+                old.replaceWith(fresh);
+            }
+
+            showNumber(count);
 
             const interval = setInterval(() => {
                 count--;
                 if (count > 0) {
-                    num.style.animation = 'none';
-                    num.offsetHeight; // reflow
-                    num.style.animation = 'countPop 0.8s ease';
-                    num.textContent = count;
+                    showNumber(count);
                 } else {
                     clearInterval(interval);
                     overlay.classList.remove('active');
@@ -1141,15 +1163,39 @@
 
         // ===== СЕКРЕТНОЕ СООБЩЕНИЕ (тряска) =====
         let lastShake = 0;
-        window.addEventListener('devicemotion', (e) => {
-            const acc = e.accelerationIncludingGravity;
-            if (!acc) return;
-            const force = Math.abs(acc.x) + Math.abs(acc.y) + Math.abs(acc.z);
-            if (force > 35 && Date.now() - lastShake > 3000) {
-                lastShake = Date.now();
-                showSecret();
-            }
-        });
+        let shakeEnabled = false;
+
+        function initShakeDetection() {
+            if (shakeEnabled) return;
+            shakeEnabled = true;
+            window.addEventListener('devicemotion', (e) => {
+                const acc = e.accelerationIncludingGravity;
+                if (!acc) return;
+                const force = Math.abs(acc.x) + Math.abs(acc.y) + Math.abs(acc.z);
+                // Порог 25 — работает на большинстве телефонов
+                if (force > 25 && Date.now() - lastShake > 3000) {
+                    lastShake = Date.now();
+                    showSecret();
+                }
+            });
+        }
+
+        // iOS 13+ требует запрос разрешения на DeviceMotion
+        if (typeof DeviceMotionEvent !== 'undefined' &&
+            typeof DeviceMotionEvent.requestPermission === 'function') {
+            // На iOS запрашиваем разрешение при первом тапе по экрану
+            document.addEventListener('click', function requestMotion() {
+                DeviceMotionEvent.requestPermission()
+                    .then(state => {
+                        if (state === 'granted') initShakeDetection();
+                    })
+                    .catch(() => {});
+                document.removeEventListener('click', requestMotion);
+            });
+        } else {
+            // Android и десктоп — сразу слушаем
+            initShakeDetection();
+        }
 
         function showSecret() {
             document.getElementById('secretMessage').classList.add('active');
@@ -1157,6 +1203,56 @@
 
         function hideSecret() {
             document.getElementById('secretMessage').classList.remove('active');
+        }
+
+        // ===== ПЕЧАТНАЯ МАШИНКА =====
+        function typewriterLines() {
+            const lines = document.querySelectorAll('#greetingText .line');
+            const texts = [];
+            lines.forEach(line => {
+                texts.push(line.textContent);
+                line.textContent = '';
+                line.style.opacity = '1';
+                line.style.transform = 'none';
+            });
+
+            let lineIdx = 0;
+            let charIdx = 0;
+            // Создаём курсор
+            const cursor = document.createElement('span');
+            cursor.className = 'typewriter-cursor';
+
+            function typeNext() {
+                if (lineIdx >= lines.length) {
+                    cursor.remove();
+                    return;
+                }
+                const currentLine = lines[lineIdx];
+                const currentText = texts[lineIdx];
+
+                if (currentText.trim() === '') {
+                    // Пустая строка — пропускаем
+                    lineIdx++;
+                    charIdx = 0;
+                    setTimeout(typeNext, 300);
+                    return;
+                }
+
+                if (charIdx < currentText.length) {
+                    currentLine.textContent = currentText.substring(0, charIdx + 1);
+                    currentLine.appendChild(cursor);
+                    charIdx++;
+                    const delay = currentText[charIdx - 1] === ',' || currentText[charIdx - 1] === '—' ? 80 : 35;
+                    setTimeout(typeNext, delay);
+                } else {
+                    cursor.remove();
+                    lineIdx++;
+                    charIdx = 0;
+                    setTimeout(typeNext, 400);
+                }
+            }
+
+            typeNext();
         }
 
         // ===== СВАЙПЫ (мобилка) =====
