@@ -613,7 +613,7 @@
         .video-bg.active {
             opacity: 0.25;
         }
-        .screen-5 > *:not(.video-bg) {
+        .screen-5 > *:not(.video-bg):not(.purple-ocean) {
             position: relative;
             z-index: 1;
         }
@@ -966,6 +966,20 @@
             box-shadow: 0 0 50px rgba(179, 136, 255, 0.3);
         }
 
+        /* ===== PURPLE OCEAN (BTS) ===== */
+        .purple-ocean {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+        body.bts-mode .purple-ocean.active {
+            opacity: 1;
+        }
+
         /* Smooth transitions for theme switch */
         .screen {
             transition: opacity 0.8s ease, background 0.6s ease;
@@ -1304,6 +1318,7 @@
 
     <!-- ЭКРАН 5: Финальный -->
     <div class="screen screen-5" id="screen5">
+        <canvas class="purple-ocean" id="purpleOcean"></canvas>
         <video class="video-bg" id="videoBg" loop muted playsinline>
             <source src="video.mp4" type="video/mp4">
         </video>
@@ -1498,10 +1513,11 @@
                 }
             }
 
-            // Refresh petals/hearts if on screen 5
+            // Refresh petals/hearts/ocean if on screen 5
             if (currentScreen === 5) {
                 showPetals();
                 showHearts();
+                if (btsMode) startPurpleOcean(); else stopPurpleOcean();
             }
         }
 
@@ -1664,6 +1680,7 @@
             if (num === 5) {
                 showPetals();
                 showHearts();
+                if (btsMode) startPurpleOcean(); else stopPurpleOcean();
                 // Показать подсказку о тряске через 5 сек
                 if (!secretFound) {
                     clearTimeout(shakeHintTimer);
@@ -1676,6 +1693,7 @@
                 document.getElementById('hearts').style.display = 'none';
                 document.getElementById('shakeHint').classList.remove('visible');
                 clearTimeout(shakeHintTimer);
+                stopPurpleOcean();
             }
         }
 
@@ -2071,6 +2089,102 @@
             }
 
             typeNext();
+        }
+
+        // ===== PURPLE OCEAN (BTS концерт) =====
+        let oceanAnimId = null;
+
+        function initPurpleOcean() {
+            const canvas = document.getElementById('purpleOcean');
+            const ctx = canvas.getContext('2d');
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            // Массив "огоньков" — как лайтстики на концерте
+            const lights = [];
+            const cols = Math.floor(canvas.width / 18);
+            const rows = Math.floor(canvas.height / 18);
+
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    lights.push({
+                        x: (c + 0.5) * (canvas.width / cols),
+                        y: (r + 0.5) * (canvas.height / rows),
+                        phase: Math.random() * Math.PI * 2,
+                        speed: 0.3 + Math.random() * 0.7,
+                        size: 1.2 + Math.random() * 1.8,
+                        hue: 260 + Math.random() * 40, // 260-300 = фиолетовый-розовый
+                    });
+                }
+            }
+
+            let time = 0;
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                time += 0.016;
+
+                // Волна идёт слева направо и снизу вверх
+                for (const light of lights) {
+                    // Волновая функция — создаёт эффект "волны" по стадиону
+                    const waveX = Math.sin(time * light.speed + light.x * 0.008 + light.phase);
+                    const waveY = Math.cos(time * light.speed * 0.7 + light.y * 0.006 + light.phase);
+                    const wave = (waveX + waveY) * 0.5; // -1..1
+
+                    const brightness = 0.15 + (wave + 1) * 0.425; // 0.15..1
+                    const alpha = 0.1 + brightness * 0.6;
+                    const radius = light.size * (0.6 + brightness * 0.4);
+
+                    // Glow
+                    const gradient = ctx.createRadialGradient(
+                        light.x, light.y, 0,
+                        light.x, light.y, radius * 4
+                    );
+                    gradient.addColorStop(0, `hsla(${light.hue}, 80%, 70%, ${alpha})`);
+                    gradient.addColorStop(0.4, `hsla(${light.hue}, 70%, 50%, ${alpha * 0.4})`);
+                    gradient.addColorStop(1, `hsla(${light.hue}, 60%, 30%, 0)`);
+
+                    ctx.beginPath();
+                    ctx.arc(light.x, light.y, radius * 4, 0, Math.PI * 2);
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+
+                    // Bright center dot
+                    ctx.beginPath();
+                    ctx.arc(light.x, light.y, radius, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsla(${light.hue}, 90%, 80%, ${alpha * 0.9})`;
+                    ctx.fill();
+                }
+
+                oceanAnimId = requestAnimationFrame(animate);
+            }
+
+            return animate;
+        }
+
+        let oceanAnimate = null;
+
+        function startPurpleOcean() {
+            const canvas = document.getElementById('purpleOcean');
+            canvas.classList.add('active');
+            if (!oceanAnimate) {
+                oceanAnimate = initPurpleOcean();
+            }
+            oceanAnimate();
+        }
+
+        function stopPurpleOcean() {
+            const canvas = document.getElementById('purpleOcean');
+            canvas.classList.remove('active');
+            if (oceanAnimId) {
+                cancelAnimationFrame(oceanAnimId);
+                oceanAnimId = null;
+            }
         }
 
         // ===== СВАЙПЫ (мобилка) =====
