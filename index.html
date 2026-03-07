@@ -694,6 +694,41 @@
             margin-top: 20px;
             letter-spacing: 2px;
         }
+
+        /* ===== ПОДСКАЗКА О ПАСХАЛКЕ ===== */
+        .shake-hint {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 182, 193, 0);
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            z-index: 90;
+            transition: color 1.5s ease;
+            pointer-events: none;
+            text-align: center;
+            white-space: nowrap;
+        }
+        .shake-hint.visible {
+            color: rgba(255, 182, 193, 0.35);
+            animation: hintPulse 2.5s ease-in-out infinite;
+        }
+        @keyframes hintPulse {
+            0%, 100% { color: rgba(255, 182, 193, 0.2); }
+            50% { color: rgba(255, 182, 193, 0.45); }
+        }
+        .shake-hint .hint-icon {
+            display: inline-block;
+            animation: hintShake 1.5s ease-in-out infinite;
+        }
+        @keyframes hintShake {
+            0%, 100% { transform: rotate(0deg); }
+            20% { transform: rotate(12deg); }
+            40% { transform: rotate(-12deg); }
+            60% { transform: rotate(8deg); }
+            80% { transform: rotate(-8deg); }
+        }
     </style>
 </head>
 <body>
@@ -794,6 +829,11 @@
         <div class="secret-hint">нажми чтобы закрыть</div>
     </div>
 
+    <!-- Подсказка о пасхалке -->
+    <div class="shake-hint" id="shakeHint">
+        <span class="hint-icon">📱</span> потряси телефон...
+    </div>
+
     <!-- Toast-уведомление -->
     <div class="toast" id="toast"></div>
 
@@ -869,9 +909,18 @@
             if (num === 5) {
                 showPetals();
                 showHearts();
+                // Показать подсказку о тряске через 5 сек
+                if (!secretFound) {
+                    clearTimeout(shakeHintTimer);
+                    shakeHintTimer = setTimeout(() => {
+                        if (!secretFound) document.getElementById('shakeHint').classList.add('visible');
+                    }, 5000);
+                }
             } else {
                 document.getElementById('petals').style.display = 'none';
                 document.getElementById('hearts').style.display = 'none';
+                document.getElementById('shakeHint').classList.remove('visible');
+                clearTimeout(shakeHintTimer);
             }
         }
 
@@ -1164,6 +1213,8 @@
         // ===== СЕКРЕТНОЕ СООБЩЕНИЕ (тряска) =====
         let lastShake = 0;
         let shakeEnabled = false;
+        let secretFound = false;
+        let shakeHintTimer = null;
 
         function initShakeDetection() {
             if (shakeEnabled) return;
@@ -1199,6 +1250,9 @@
 
         function showSecret() {
             document.getElementById('secretMessage').classList.add('active');
+            // Скрыть подсказку навсегда после первого срабатывания
+            document.getElementById('shakeHint').classList.remove('visible');
+            secretFound = true;
         }
 
         function hideSecret() {
