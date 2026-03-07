@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>С 8 Марта, Ксения! 💐</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            background: #1a0a1e;
+            color: #fff;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* ===== ЭКРАНЫ ===== */
+        .screen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease;
+            z-index: 1;
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: all;
+            z-index: 10;
+        }
+
+        /* ===== ФОНЫ ===== */
+        .screen-1 {
+            background: linear-gradient(135deg, #1a0a1e 0%, #2d1b3d 30%, #4a2060 60%, #1a0a1e 100%);
+        }
+
+        .screen-2 {
+            background: linear-gradient(135deg, #1e0a2e 0%, #3d1b4a 50%, #1e0a2e 100%);
+        }
+
+        .screen-3 {
+            background: linear-gradient(135deg, #0a1a2e 0%, #1b2d4a 50%, #0a1a2e 100%);
+        }
+
+        .screen-4 {
+            background: linear-gradient(135deg, #1a0a1e 0%, #2d1b3d 50%, #1a0a1e 100%);
+        }
+
+        .screen-5 {
+            background: linear-gradient(135deg, #2e0a1a 0%, #4a1b2d 50%, #2e0a1a 100%);
+        }
+
+        /* ===== КНОПКИ ===== */
+        .btn {
+            display: inline-block;
+            padding: 16px 40px;
+            border: 2px solid rgba(255, 182, 193, 0.6);
+            border-radius: 50px;
+            background: rgba(255, 105, 135, 0.15);
+            color: #ffb6c1;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            backdrop-filter: blur(10px);
+            margin-top: 30px;
+        }
+
+        .btn:hover {
+            background: rgba(255, 105, 135, 0.35);
+            border-color: #ffb6c1;
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 105, 135, 0.3);
+        }
+
+        /* ===== ЭКРАН 1: Стартовый ===== */
+        .eight-march {
+            font-size: clamp(60px, 15vw, 150px);
+            font-family: 'Great Vibes', cursive;
+            color: transparent;
+            background: linear-gradient(135deg, #ff6b9d, #ffa8cc, #ffdb8b, #ff6b9d);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shimmer 4s ease infinite;
+            text-shadow: none;
+            line-height: 1.2;
+            text-align: center;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .subtitle-names {
+            font-size: clamp(18px, 4vw, 28px);
+            color: #ffb6c1;
+            margin-top: 15px;
+            font-weight: 300;
+            letter-spacing: 3px;
+            height: 40px;
+            position: relative;
+        }
+
+        .name-cycle {
+            display: inline-block;
+            animation: fadeNames 6s ease infinite;
+        }
+
+        @keyframes fadeNames {
+            0%, 25% { opacity: 1; content: "Ксения"; }
+            30%, 33% { opacity: 0; }
+            36%, 58% { opacity: 1; }
+            63%, 66% { opacity: 0; }
+            69%, 92% { opacity: 1; }
+            97%, 100% { opacity: 0; }
+        }
+
+        /* ===== ЭКРАН 2: Имя ===== */
+        .name-display {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(50px, 12vw, 120px);
+            color: transparent;
+            background: linear-gradient(135deg, #ff9ec6, #ffd4a8, #ff9ec6);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shimmer 3s ease infinite;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .name-display.animate {
+            animation: nameAppear 1.5s ease forwards, shimmer 3s ease infinite;
+        }
+
+        @keyframes nameAppear {
+            0% { opacity: 0; transform: translateY(30px) scale(0.8); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .compliment {
+            font-size: clamp(16px, 3vw, 24px);
+            color: #e8b4d0;
+            margin-top: 20px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            opacity: 0;
+            max-width: 600px;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .compliment.animate {
+            animation: fadeUp 1s ease 0.8s forwards;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== ЭКРАН 3: Поздравление ===== */
+        .greeting-text {
+            max-width: 700px;
+            text-align: center;
+            line-height: 2;
+            font-size: clamp(14px, 2.5vw, 20px);
+            color: #e0d0e8;
+            font-weight: 300;
+        }
+
+        .greeting-text .line {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+
+        .greeting-text .line.animate {
+            animation: fadeUp 0.8s ease forwards;
+        }
+
+        .greeting-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(30px, 7vw, 60px);
+            color: #ffb6c1;
+            margin-bottom: 30px;
+            opacity: 0;
+        }
+
+        .greeting-title.animate {
+            animation: fadeUp 1s ease forwards;
+        }
+
+        /* ===== ЭКРАН 4: Галерея ===== */
+        .gallery-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(28px, 6vw, 50px);
+            color: #ffb6c1;
+            margin-bottom: 30px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            max-width: 800px;
+            width: 100%;
+            padding: 0 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .gallery::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .gallery::-webkit-scrollbar-thumb {
+            background: rgba(255, 182, 193, 0.3);
+            border-radius: 3px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            opacity: 0;
+            transform: scale(0.8);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05) !important;
+        }
+
+        .gallery-item.animate {
+            animation: popIn 0.6s ease forwards;
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 182, 193, 0.3);
+        }
+
+        .gallery-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 105, 135, 0.2), rgba(255, 182, 193, 0.1));
+            border: 2px dashed rgba(255, 182, 193, 0.4);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 182, 193, 0.6);
+            font-size: 14px;
+            text-align: center;
+            padding: 10px;
+        }
+
+        /* Модальное окно для фото */
+        .modal {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            cursor: pointer;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+            box-shadow: 0 0 50px rgba(255, 105, 135, 0.3);
+        }
+
+        /* ===== ЭКРАН 5: Финал ===== */
+        .final-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(30px, 8vw, 70px);
+            color: transparent;
+            background: linear-gradient(135deg, #ff6b9d, #ffdb8b, #ff6b9d);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shimmer 3s ease infinite;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .final-signature {
+            font-size: clamp(16px, 3vw, 22px);
+            color: #e8b4d0;
+            margin-top: 20px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            opacity: 0;
+        }
+
+        .final-signature.animate {
+            animation: fadeUp 1s ease 0.5s forwards;
+        }
+
+        .music-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 30px;
+            border: 2px solid rgba(255, 182, 193, 0.5);
+            border-radius: 50px;
+            background: rgba(255, 105, 135, 0.1);
+            color: #ffb6c1;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .music-btn:hover {
+            background: rgba(255, 105, 135, 0.25);
+        }
+
+        .music-icon {
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .music-btn.playing .music-icon {
+            animation: pulse 1s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* ===== ПАДАЮЩИЕ ЛЕПЕСТКИ ===== */
+        .petals-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 5;
+            overflow: hidden;
+        }
+
+        .petal {
+            position: absolute;
+            top: -20px;
+            opacity: 0.8;
+            animation: fall linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-20px) rotate(0deg) translateX(0);
+                opacity: 0.8;
+            }
+            25% {
+                transform: translateY(25vh) rotate(90deg) translateX(30px);
+            }
+            50% {
+                transform: translateY(50vh) rotate(180deg) translateX(-20px);
+            }
+            75% {
+                transform: translateY(75vh) rotate(270deg) translateX(25px);
+            }
+            100% {
+                transform: translateY(105vh) rotate(360deg) translateX(-10px);
+                opacity: 0;
+            }
+        }
+
+        /* ===== ЧАСТИЦЫ-ЗВЕЗДЫ ===== */
+        .stars-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 3s ease infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.8; }
+        }
+
+        /* ===== НАВИГАЦИЯ-ТОЧКИ ===== */
+        .nav-dots {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .nav-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 182, 193, 0.5);
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: #ffb6c1;
+            box-shadow: 0 0 10px rgba(255, 182, 193, 0.5);
+        }
+
+        /* ===== МОБИЛЬНАЯ АДАПТАЦИЯ ===== */
+        @media (max-width: 600px) {
+            .gallery {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .btn {
+                padding: 14px 30px;
+                font-size: 14px;
+            }
+
+            .nav-dots {
+                right: 10px;
+            }
+        }
+
+        /* ===== СЕРДЕЧКИ ===== */
+        .hearts-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 5;
+            overflow: hidden;
+        }
+
+        /* ===== СВЕТЛЯЧКИ (при музыке) ===== */
+        .fireflies-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 6;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+
+        .fireflies-container.active {
+            opacity: 1;
+        }
+
+        .firefly {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: fireflyFloat linear infinite, fireflyGlow ease-in-out infinite;
+        }
+
+        @keyframes fireflyFloat {
+            0% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(var(--dx1), var(--dy1));
+            }
+            50% {
+                transform: translate(var(--dx2), var(--dy2));
+            }
+            75% {
+                transform: translate(var(--dx3), var(--dy3));
+            }
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+
+        @keyframes fireflyGlow {
+            0%, 100% {
+                opacity: 0.2;
+                box-shadow: 0 0 4px 2px currentColor;
+            }
+            50% {
+                opacity: 1;
+                box-shadow: 0 0 16px 8px currentColor;
+            }
+        }
+
+        /* ===== ПУЛЬСАЦИЯ ФОНА (при музыке) ===== */
+        body.music-playing .screen.active {
+            animation: bgPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { filter: brightness(1) saturate(1); }
+            50% { filter: brightness(1.3) saturate(1.2); }
+        }
+
+        /* ===== КНОПКА "ПОКАЗАТЬ ПОДРУГАМ" ===== */
+        .share-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            border-radius: 50px;
+            background: rgba(255, 215, 0, 0.1);
+            color: #ffd700;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            backdrop-filter: blur(10px);
+            letter-spacing: 1px;
+            text-transform: none;
+        }
+
+        .share-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.2);
+        }
+
+        /* ===== TOAST-УВЕДОМЛЕНИЕ ===== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(255, 215, 0, 0.15);
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            color: #ffd700;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            opacity: 0;
+            transition: all 0.4s ease;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Звёздный фон -->
+    <div class="stars-container" id="stars"></div>
+
+    <!-- Лепестки (появляются на финальном экране) -->
+    <div class="petals-container" id="petals" style="display:none;"></div>
+
+    <!-- Сердечки -->
+    <div class="hearts-container" id="hearts" style="display:none;"></div>
+
+    <!-- Светлячки (при музыке) -->
+    <div class="fireflies-container" id="fireflies"></div>
+
+    <!-- Навигация -->
+    <div class="nav-dots" id="navDots">
+        <div class="nav-dot active" data-screen="1"></div>
+        <div class="nav-dot" data-screen="2"></div>
+        <div class="nav-dot" data-screen="3"></div>
+        <div class="nav-dot" data-screen="4"></div>
+        <div class="nav-dot" data-screen="5"></div>
+    </div>
+
+    <!-- ЭКРАН 1: Стартовый -->
+    <div class="screen screen-1 active" id="screen1">
+        <div class="eight-march">8 Марта</div>
+        <div class="subtitle-names">
+            для <span class="name-cycle" id="nameCycle">Ксении</span>
+        </div>
+        <button class="btn" onclick="goToScreen(2)">Открыть поздравление</button>
+    </div>
+
+    <!-- ЭКРАН 2: Имя -->
+    <div class="screen screen-2" id="screen2">
+        <div class="name-display" id="nameDisplay">Ксения</div>
+        <div class="compliment" id="compliment">
+            Самая красивая, нежная и удивительная.<br>
+            Ты — моё солнце и вдохновение.
+        </div>
+        <button class="btn" onclick="goToScreen(3)">Дальше</button>
+    </div>
+
+    <!-- ЭКРАН 3: Поздравление -->
+    <div class="screen screen-3" id="screen3">
+        <div class="greeting-title" id="greetingTitle">Моя дорогая Ксюша!</div>
+        <div class="greeting-text" id="greetingText">
+            <div class="line">С прекрасным праздником весны тебя!</div>
+            <div class="line">Ты делаешь мой мир ярче и теплее каждый день.</div>
+            <div class="line">Твоя улыбка — лучшее, что я видел в жизни,</div>
+            <div class="line">а твой смех — самая красивая мелодия.</div>
+            <div class="line">&nbsp;</div>
+            <div class="line">Пусть этот день будет наполнен радостью,</div>
+            <div class="line">пусть сбываются все твои мечты,</div>
+            <div class="line">а я буду рядом, чтобы делать тебя счастливой.</div>
+            <div class="line">&nbsp;</div>
+            <div class="line">Оксана, Ксюша, Ксения —</div>
+            <div class="line">каждое имя звучит как музыка,</div>
+            <div class="line">потому что это всё ты ❤</div>
+        </div>
+        <button class="btn" onclick="goToScreen(4)">Смотреть фото</button>
+    </div>
+
+    <!-- ЭКРАН 4: Галерея -->
+    <div class="screen screen-4" id="screen4">
+        <div class="gallery-title">Наши моменты</div>
+        <div class="gallery" id="gallery">
+            <!-- Фотографии добавляются здесь -->
+        </div>
+        <button class="btn" onclick="goToScreen(5)">Финал</button>
+    </div>
+
+    <!-- ЭКРАН 5: Финальный -->
+    <div class="screen screen-5" id="screen5">
+        <div class="final-text" id="finalText">С любовью,<br>навсегда твой ❤</div>
+        <div class="final-signature" id="finalSignature">8 марта 2026</div>
+        <button class="music-btn" id="musicBtn" onclick="toggleMusic()">
+            <span class="music-icon">♪</span>
+            <span id="musicLabel">Включить музыку</span>
+        </button>
+        <button class="share-btn" onclick="shareCard()">
+            <span>💌</span> Показать подругам
+        </button>
+    </div>
+
+    <!-- Toast-уведомление -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Модальное окно для фото -->
+    <div class="modal" id="modal" onclick="closeModal()">
+        <img id="modalImg" src="" alt="">
+    </div>
+
+    <!-- Аудио -->
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // ===== КОНФИГУРАЦИЯ =====
+        // Добавь свои фото в папку photos/ и укажи их здесь:
+        const PHOTOS = [
+            'photos/photo1.jpg',
+            'photos/photo2.jpg',
+            'photos/photo3.jpg',
+            'photos/photo4.jpg',
+            'photos/photo5.jpg',
+            'photos/photo6.jpg',
+        ];
+
+        // Имена для циклической смены
+        const NAMES = ['Ксении', 'Ксюше', 'Оксане'];
+
+        // ===== СОСТОЯНИЕ =====
+        let currentScreen = 1;
+        let musicPlaying = false;
+        let nameIndex = 0;
+
+        // ===== ИНИЦИАЛИЗАЦИЯ =====
+        document.addEventListener('DOMContentLoaded', () => {
+            createStars();
+            initGallery();
+            startNameCycle();
+        });
+
+        // ===== СМЕНА ИМЁН =====
+        function startNameCycle() {
+            const el = document.getElementById('nameCycle');
+            setInterval(() => {
+                el.style.transition = 'opacity 0.5s ease';
+                el.style.opacity = '0';
+                setTimeout(() => {
+                    nameIndex = (nameIndex + 1) % NAMES.length;
+                    el.textContent = NAMES[nameIndex];
+                    el.style.opacity = '1';
+                }, 500);
+            }, 2000);
+        }
+
+        // ===== НАВИГАЦИЯ =====
+        function goToScreen(num) {
+            const prev = document.getElementById(`screen${currentScreen}`);
+            const next = document.getElementById(`screen${num}`);
+
+            prev.classList.remove('active');
+            next.classList.add('active');
+
+            // Обновить точки
+            document.querySelectorAll('.nav-dot').forEach(d => d.classList.remove('active'));
+            document.querySelector(`.nav-dot[data-screen="${num}"]`).classList.add('active');
+
+            currentScreen = num;
+
+            // Запустить анимации экрана
+            setTimeout(() => animateScreen(num), 200);
+
+            // Лепестки и сердечки на финальном экране
+            if (num === 5) {
+                showPetals();
+                showHearts();
+            } else {
+                document.getElementById('petals').style.display = 'none';
+                document.getElementById('hearts').style.display = 'none';
+            }
+        }
+
+        // Клик по точкам навигации
+        document.querySelectorAll('.nav-dot').forEach(dot => {
+            dot.addEventListener('click', () => {
+                goToScreen(parseInt(dot.dataset.screen));
+            });
+        });
+
+        // ===== АНИМАЦИИ ЭКРАНОВ =====
+        function animateScreen(num) {
+            switch(num) {
+                case 2:
+                    document.getElementById('nameDisplay').classList.add('animate');
+                    document.getElementById('compliment').classList.add('animate');
+                    break;
+                case 3:
+                    const title = document.getElementById('greetingTitle');
+                    title.classList.add('animate');
+                    document.querySelectorAll('#greetingText .line').forEach((line, i) => {
+                        setTimeout(() => line.classList.add('animate'), 400 + i * 300);
+                        line.style.animationDelay = `${0.4 + i * 0.3}s`;
+                    });
+                    break;
+                case 4:
+                    document.querySelectorAll('.gallery-item').forEach((item, i) => {
+                        setTimeout(() => item.classList.add('animate'), i * 150);
+                    });
+                    break;
+                case 5:
+                    document.getElementById('finalSignature').classList.add('animate');
+                    break;
+            }
+        }
+
+        // ===== ГАЛЕРЕЯ =====
+        function initGallery() {
+            const gallery = document.getElementById('gallery');
+
+            if (PHOTOS.length === 0) {
+                // Показать заглушки с инструкцией
+                for (let i = 0; i < 6; i++) {
+                    const item = document.createElement('div');
+                    item.className = 'gallery-item';
+                    item.innerHTML = `
+                        <div class="gallery-placeholder">
+                            📷<br>Фото ${i + 1}<br>
+                            <small>Добавь в photos/</small>
+                        </div>
+                    `;
+                    gallery.appendChild(item);
+                }
+            } else {
+                PHOTOS.forEach((src, i) => {
+                    const item = document.createElement('div');
+                    item.className = 'gallery-item';
+                    item.innerHTML = `<img src="${src}" alt="Фото ${i + 1}" loading="lazy">`;
+                    item.addEventListener('click', () => openModal(src));
+                    gallery.appendChild(item);
+                });
+            }
+        }
+
+        // ===== МОДАЛКА ДЛЯ ФОТО =====
+        function openModal(src) {
+            const modal = document.getElementById('modal');
+            document.getElementById('modalImg').src = src;
+            modal.classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('show');
+        }
+
+        // ===== ЗВЁЗДЫ =====
+        function createStars() {
+            const container = document.getElementById('stars');
+            for (let i = 0; i < 80; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (2 + Math.random() * 3) + 's';
+                const size = 1 + Math.random() * 2;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                container.appendChild(star);
+            }
+        }
+
+        // ===== ЛЕПЕСТКИ =====
+        function showPetals() {
+            const container = document.getElementById('petals');
+            container.style.display = 'block';
+            container.innerHTML = '';
+
+            for (let i = 0; i < 30; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                petal.style.left = Math.random() * 100 + '%';
+                petal.style.animationDuration = (4 + Math.random() * 4) + 's';
+                petal.style.animationDelay = Math.random() * 5 + 's';
+
+                const colors = ['#ffb6c1', '#ff69b4', '#ffc0cb', '#ff91a4', '#ffa8cc'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const size = 8 + Math.random() * 12;
+
+                petal.innerHTML = `<svg width="${size}" height="${size}" viewBox="0 0 20 20">
+                    <ellipse cx="10" cy="8" rx="6" ry="8" fill="${color}" opacity="0.7" transform="rotate(${Math.random()*40-20}, 10, 8)"/>
+                </svg>`;
+
+                container.appendChild(petal);
+            }
+        }
+
+        // ===== СЕРДЕЧКИ =====
+        function showHearts() {
+            const container = document.getElementById('hearts');
+            container.style.display = 'block';
+            container.innerHTML = '';
+
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'petal';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (5 + Math.random() * 5) + 's';
+                heart.style.animationDelay = (2 + Math.random() * 5) + 's';
+
+                const size = 10 + Math.random() * 15;
+                const colors = ['#ff6b9d', '#ff3366', '#ff69b4'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+
+                heart.innerHTML = `<svg width="${size}" height="${size}" viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="${color}" opacity="0.6"/>
+                </svg>`;
+
+                container.appendChild(heart);
+            }
+        }
+
+        // ===== СВЕТЛЯЧКИ =====
+        let firefliesCreated = false;
+
+        function createFireflies() {
+            const container = document.getElementById('fireflies');
+            container.innerHTML = '';
+            const count = 40;
+            const colors = [
+                '#ffdb8b', '#ffd700', '#ffb6c1', '#ff69b4',
+                '#ffa8cc', '#ffe4b5', '#fff5cc', '#ffc0cb'
+            ];
+
+            for (let i = 0; i < count; i++) {
+                const fly = document.createElement('div');
+                fly.className = 'firefly';
+
+                const size = 3 + Math.random() * 5;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+
+                fly.style.width = size + 'px';
+                fly.style.height = size + 'px';
+                fly.style.left = Math.random() * 100 + '%';
+                fly.style.top = Math.random() * 100 + '%';
+                fly.style.color = color;
+                fly.style.background = color;
+
+                // Случайные траектории для каждого светлячка
+                const range = 80 + Math.random() * 120;
+                fly.style.setProperty('--dx1', (Math.random() * range - range / 2) + 'px');
+                fly.style.setProperty('--dy1', (Math.random() * range - range / 2) + 'px');
+                fly.style.setProperty('--dx2', (Math.random() * range - range / 2) + 'px');
+                fly.style.setProperty('--dy2', (Math.random() * range - range / 2) + 'px');
+                fly.style.setProperty('--dx3', (Math.random() * range - range / 2) + 'px');
+                fly.style.setProperty('--dy3', (Math.random() * range - range / 2) + 'px');
+
+                fly.style.animationDuration = (8 + Math.random() * 12) + 's, ' + (2 + Math.random() * 3) + 's';
+                fly.style.animationDelay = (Math.random() * 5) + 's, ' + (Math.random() * 3) + 's';
+
+                container.appendChild(fly);
+            }
+            firefliesCreated = true;
+        }
+
+        function showFireflies() {
+            if (!firefliesCreated) createFireflies();
+            document.getElementById('fireflies').classList.add('active');
+        }
+
+        function hideFireflies() {
+            document.getElementById('fireflies').classList.remove('active');
+        }
+
+        // ===== МУЗЫКА =====
+        function toggleMusic() {
+            const audio = document.getElementById('bgMusic');
+            const btn = document.getElementById('musicBtn');
+            const label = document.getElementById('musicLabel');
+
+            if (musicPlaying) {
+                audio.pause();
+                btn.classList.remove('playing');
+                label.textContent = 'Включить музыку';
+                hideFireflies();
+                document.body.classList.remove('music-playing');
+            } else {
+                audio.play().catch(() => {
+                    label.textContent = 'Нет файла music.mp3';
+                    return;
+                });
+                btn.classList.add('playing');
+                label.textContent = 'Пауза';
+                showFireflies();
+                document.body.classList.add('music-playing');
+            }
+            musicPlaying = !musicPlaying;
+        }
+
+        // ===== ПОДЕЛИТЬСЯ =====
+        function shareCard() {
+            const url = window.location.href;
+            const text = 'Смотри, какую открытку мне сделали на 8 Марта! 💐';
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'С 8 Марта! 💐',
+                    text: text,
+                    url: url
+                }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(url).then(() => {
+                    showToast('Ссылка скопирована! 💌');
+                }).catch(() => {
+                    showToast('Скопируй ссылку из адресной строки');
+                });
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        // ===== КЛАВИАТУРА =====
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                if (currentScreen < 5) goToScreen(currentScreen + 1);
+            }
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                if (currentScreen > 1) goToScreen(currentScreen - 1);
+            }
+        });
+
+        // ===== СВАЙПЫ (мобилка) =====
+        let touchStartY = 0;
+        let touchStartX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+            touchStartX = e.touches[0].clientX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            const dy = touchStartY - e.changedTouches[0].clientY;
+            const dx = touchStartX - e.changedTouches[0].clientX;
+
+            if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 50) {
+                if (dy > 0 && currentScreen < 5) goToScreen(currentScreen + 1);
+                if (dy < 0 && currentScreen > 1) goToScreen(currentScreen - 1);
+            } else if (Math.abs(dx) > 50) {
+                if (dx > 0 && currentScreen < 5) goToScreen(currentScreen + 1);
+                if (dx < 0 && currentScreen > 1) goToScreen(currentScreen - 1);
+            }
+        });
+    </script>
+</body>
+</html>
