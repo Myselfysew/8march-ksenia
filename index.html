@@ -980,6 +980,66 @@
             opacity: 1;
         }
 
+        /* ===== POLAROID CARDS (BTS) ===== */
+        .polaroids-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 2;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        body.bts-mode .polaroids-container.active {
+            opacity: 1;
+        }
+
+        .polaroid {
+            position: absolute;
+            background: #fff;
+            padding: 6px 6px 22px 6px;
+            border-radius: 2px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(179, 136, 255, 0.2);
+            animation: polaroidFloat var(--float-dur) ease-in-out infinite;
+            animation-delay: var(--float-delay);
+        }
+
+        .polaroid-img {
+            width: 100%;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, var(--pol-c1), var(--pol-c2));
+            border-radius: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--pol-emoji-size);
+        }
+
+        .polaroid-label {
+            text-align: center;
+            font-size: 7px;
+            color: #9575cd;
+            margin-top: 4px;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        @keyframes polaroidFloat {
+            0%, 100% {
+                transform: translate(0, 0) rotate(var(--rot-start));
+            }
+            25% {
+                transform: translate(var(--drift-x1), var(--drift-y1)) rotate(var(--rot-mid1));
+            }
+            50% {
+                transform: translate(var(--drift-x2), var(--drift-y2)) rotate(var(--rot-mid2));
+            }
+            75% {
+                transform: translate(var(--drift-x3), var(--drift-y3)) rotate(var(--rot-mid3));
+            }
+        }
+
         /* Smooth transitions for theme switch */
         .screen {
             transition: opacity 0.8s ease, background 0.6s ease;
@@ -1217,6 +1277,9 @@
         <span class="bts-toggle-label">BTS 💜</span>
         <div class="bts-switch"></div>
     </div>
+
+    <!-- Polaroid фотокарточки (BTS) -->
+    <div class="polaroids-container" id="polaroids"></div>
 
     <!-- Звёздный фон -->
     <div class="stars-container" id="stars"></div>
@@ -1496,6 +1559,9 @@
             btsMode = !btsMode;
             document.body.classList.toggle('bts-mode', btsMode);
             playClickSound();
+
+            // Polaroid cards
+            if (btsMode) showPolaroids(); else hidePolaroids();
 
             // Switch music if playing
             if (musicPlaying) {
@@ -2089,6 +2155,77 @@
             }
 
             typeNext();
+        }
+
+        // ===== POLAROID ФОТОКАРТОЧКИ (BTS) =====
+        let polaroidsCreated = false;
+
+        function createPolaroids() {
+            const container = document.getElementById('polaroids');
+            container.innerHTML = '';
+
+            const cards = [
+                { emoji: '💜', label: 'borahae', c1: '#b388ff', c2: '#e040fb' },
+                { emoji: '🦋', label: 'butterfly', c1: '#ce93d8', c2: '#7c4dff' },
+                { emoji: '🌙', label: 'moonchild', c1: '#9575cd', c2: '#b388ff' },
+                { emoji: '⭐', label: 'star', c1: '#e040fb', c2: '#ea80fc' },
+                { emoji: '🫰', label: 'purple you', c1: '#7c4dff', c2: '#ce93d8' },
+                { emoji: '💫', label: 'magic shop', c1: '#b39ddb', c2: '#e040fb' },
+                { emoji: '🎵', label: 'dynamite', c1: '#ea80fc', c2: '#b388ff' },
+            ];
+
+            cards.forEach((card, i) => {
+                const el = document.createElement('div');
+                el.className = 'polaroid';
+
+                const size = 50 + Math.random() * 30;
+                const left = 3 + (i / cards.length) * 85 + Math.random() * 8;
+                const top = 10 + Math.random() * 70;
+                const dur = 12 + Math.random() * 10;
+                const delay = Math.random() * -dur;
+                const rotStart = -15 + Math.random() * 30;
+                const driftRange = 15 + Math.random() * 20;
+
+                el.style.cssText = `
+                    left: ${left}%;
+                    top: ${top}%;
+                    width: ${size}px;
+                    --pol-c1: ${card.c1};
+                    --pol-c2: ${card.c2};
+                    --pol-emoji-size: ${size * 0.4}px;
+                    --float-dur: ${dur}s;
+                    --float-delay: ${delay}s;
+                    --rot-start: ${rotStart}deg;
+                    --rot-mid1: ${rotStart + (-8 + Math.random() * 16)}deg;
+                    --rot-mid2: ${rotStart + (-10 + Math.random() * 20)}deg;
+                    --rot-mid3: ${rotStart + (-8 + Math.random() * 16)}deg;
+                    --drift-x1: ${(-driftRange + Math.random() * driftRange * 2)}px;
+                    --drift-y1: ${(-driftRange + Math.random() * driftRange * 2)}px;
+                    --drift-x2: ${(-driftRange + Math.random() * driftRange * 2)}px;
+                    --drift-y2: ${(-driftRange + Math.random() * driftRange * 2)}px;
+                    --drift-x3: ${(-driftRange + Math.random() * driftRange * 2)}px;
+                    --drift-y3: ${(-driftRange + Math.random() * driftRange * 2)}px;
+                    opacity: ${0.4 + Math.random() * 0.35};
+                `;
+
+                el.innerHTML = `
+                    <div class="polaroid-img">${card.emoji}</div>
+                    <div class="polaroid-label">${card.label}</div>
+                `;
+
+                container.appendChild(el);
+            });
+
+            polaroidsCreated = true;
+        }
+
+        function showPolaroids() {
+            if (!polaroidsCreated) createPolaroids();
+            document.getElementById('polaroids').classList.add('active');
+        }
+
+        function hidePolaroids() {
+            document.getElementById('polaroids').classList.remove('active');
         }
 
         // ===== PURPLE OCEAN (BTS концерт) =====
