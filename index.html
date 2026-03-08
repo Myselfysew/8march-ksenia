@@ -1321,6 +1321,9 @@
         <video class="video-bg" id="videoBg" loop muted playsinline>
             <source src="video.mp4" type="video/mp4">
         </video>
+        <video class="video-bg bts-video-bg" id="videoBg2" loop muted playsinline>
+            <source src="video2.MOV" type="video/mp4">
+        </video>
         <div class="final-text" id="finalText">
             <span class="bts-normal-text">С любовью,<br>навсегда твой ❤</span>
             <span class="bts-purple-text">I purple you 💜</span>
@@ -1377,6 +1380,7 @@
             'photos/photo4.jpg',
             'photos/photo5.jpg',
             'photos/photo6.jpg',
+            'photos/photo7.jpg',
         ];
 
         // Имена для циклической смены
@@ -1512,14 +1516,23 @@
                 }
             }
 
-            // Видео: выключить в BTS, включить обратно в обычном
+            // Видео: переключить между video и video2
             const video = document.getElementById('videoBg');
+            const video2 = document.getElementById('videoBg2');
             if (btsMode) {
                 video.pause();
                 video.classList.remove('active');
-            } else if (musicPlaying) {
-                video.play().catch(() => {});
-                video.classList.add('active');
+                if (musicPlaying) {
+                    video2.play().catch(() => {});
+                    video2.classList.add('active');
+                }
+            } else {
+                video2.pause();
+                video2.classList.remove('active');
+                if (musicPlaying) {
+                    video.play().catch(() => {});
+                    video.classList.add('active');
+                }
             }
 
             // Refresh petals/hearts/ocean if on screen 5
@@ -1903,6 +1916,7 @@
             const label = document.getElementById('musicLabel');
 
             const video = document.getElementById('videoBg');
+            const video2 = document.getElementById('videoBg2');
 
             if (musicPlaying) {
                 bgAudio.pause();
@@ -1913,6 +1927,8 @@
                 document.body.classList.remove('music-playing');
                 video.pause();
                 video.classList.remove('active');
+                video2.pause();
+                video2.classList.remove('active');
             } else {
                 const errFile = btsMode ? 'bts-music.mp3' : 'music.mp3';
                 audio.play().catch(() => {
@@ -1923,8 +1939,10 @@
                 label.textContent = 'Пауза';
                 showFireflies();
                 document.body.classList.add('music-playing');
-                // Видео только в обычном режиме — в BTS его заменяет purple ocean
-                if (!btsMode) {
+                if (btsMode) {
+                    video2.play().catch(() => {});
+                    video2.classList.add('active');
+                } else {
                     video.play().catch(() => {});
                     video.classList.add('active');
                 }
