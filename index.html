@@ -1512,6 +1512,16 @@
                 }
             }
 
+            // Видео: выключить в BTS, включить обратно в обычном
+            const video = document.getElementById('videoBg');
+            if (btsMode) {
+                video.pause();
+                video.classList.remove('active');
+            } else if (musicPlaying) {
+                video.play().catch(() => {});
+                video.classList.add('active');
+            }
+
             // Refresh petals/hearts/ocean if on screen 5
             if (currentScreen === 5) {
                 showPetals();
@@ -1913,8 +1923,11 @@
                 label.textContent = 'Пауза';
                 showFireflies();
                 document.body.classList.add('music-playing');
-                video.play().catch(() => {});
-                video.classList.add('active');
+                // Видео только в обычном режиме — в BTS его заменяет purple ocean
+                if (!btsMode) {
+                    video.play().catch(() => {});
+                    video.classList.add('active');
+                }
             }
             musicPlaying = !musicPlaying;
         }
@@ -2093,6 +2106,7 @@
 
         // ===== PURPLE OCEAN (BTS концерт) =====
         let oceanAnimId = null;
+        let oceanAnimate = null;
 
         function initPurpleOcean() {
             const canvas = document.getElementById('purpleOcean');
@@ -2105,20 +2119,24 @@
             resize();
             window.addEventListener('resize', resize);
 
-            // Массив "огоньков" — как лайтстики на концерте
+            // Меньше точек — сетка 40px, без gradient для производительности
             const lights = [];
-            const cols = Math.floor(canvas.width / 18);
-            const rows = Math.floor(canvas.height / 18);
+            const spacing = 40;
+            const cols = Math.floor(canvas.width / spacing);
+            const rows = Math.floor(canvas.height / spacing);
 
             for (let r = 0; r < rows; r++) {
                 for (let c = 0; c < cols; c++) {
                     lights.push({
-                        x: (c + 0.5) * (canvas.width / cols),
-                        y: (r + 0.5) * (canvas.height / rows),
+                        x: (c + 0.5) * spacing,
+                        y: (r + 0.5) * spacing,
                         phase: Math.random() * Math.PI * 2,
                         speed: 0.3 + Math.random() * 0.7,
-                        size: 1.2 + Math.random() * 1.8,
-                        hue: 260 + Math.random() * 40, // 260-300 = фиолетовый-розовый
+                        baseSize: 1.5 + Math.random() * 2,
+                        // Предвычисленные цвета для скорости
+                        r: 140 + Math.floor(Math.random() * 80),
+                        g: 80 + Math.floor(Math.random() * 60),
+                        b: 200 + Math.floor(Math.random() * 55),
                     });
                 }
             }
@@ -2127,47 +2145,33 @@
 
             function animate() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                time += 0.016;
+                time += 0.02;
 
-                // Волна идёт слева направо и снизу вверх
-                for (const light of lights) {
-                    // Волновая функция — создаёт эффект "волны" по стадиону
-                    const waveX = Math.sin(time * light.speed + light.x * 0.008 + light.phase);
-                    const waveY = Math.cos(time * light.speed * 0.7 + light.y * 0.006 + light.phase);
-                    const wave = (waveX + waveY) * 0.5; // -1..1
+                for (let i = 0; i < lights.length; i++) {
+                    const l = lights[i];
+                    const wave = Math.sin(time * l.speed + l.x * 0.006 + l.y * 0.004 + l.phase);
+                    const brightness = 0.2 + (wave + 1) * 0.4;
+                    const radius = l.baseSize * (0.7 + brightness * 0.3);
 
-                    const brightness = 0.15 + (wave + 1) * 0.425; // 0.15..1
-                    const alpha = 0.1 + brightness * 0.6;
-                    const radius = light.size * (0.6 + brightness * 0.4);
-
-                    // Glow
-                    const gradient = ctx.createRadialGradient(
-                        light.x, light.y, 0,
-                        light.x, light.y, radius * 4
-                    );
-                    gradient.addColorStop(0, `hsla(${light.hue}, 80%, 70%, ${alpha})`);
-                    gradient.addColorStop(0.4, `hsla(${light.hue}, 70%, 50%, ${alpha * 0.4})`);
-                    gradient.addColorStop(1, `hsla(${light.hue}, 60%, 30%, 0)`);
-
+                    ctx.globalAlpha = brightness * 0.7;
+                    ctx.fillStyle = `rgb(${l.r},${l.g},${l.b})`;
                     ctx.beginPath();
-                    ctx.arc(light.x, light.y, radius * 4, 0, Math.PI * 2);
-                    ctx.fillStyle = gradient;
+                    ctx.arc(l.x, l.y, radius, 0, 6.28);
                     ctx.fill();
 
-                    // Bright center dot
+                    // Лёгкий glow — один круг побольше, полупрозрачный
+                    ctx.globalAlpha = brightness * 0.15;
                     ctx.beginPath();
-                    ctx.arc(light.x, light.y, radius, 0, Math.PI * 2);
-                    ctx.fillStyle = `hsla(${light.hue}, 90%, 80%, ${alpha * 0.9})`;
+                    ctx.arc(l.x, l.y, radius * 3, 0, 6.28);
                     ctx.fill();
                 }
 
+                ctx.globalAlpha = 1;
                 oceanAnimId = requestAnimationFrame(animate);
             }
 
             return animate;
         }
-
-        let oceanAnimate = null;
 
         function startPurpleOcean() {
             const canvas = document.getElementById('purpleOcean');
